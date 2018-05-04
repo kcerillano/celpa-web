@@ -1,0 +1,45 @@
+<div class="container table-bg">
+    <% var numberOfDays = 0 %>
+    <% if (result) { %>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>No. of times farmer has taken a picture per day</th>
+                    <th>Quantity of lived crops</th>
+                    <th>Planting duration</th>
+                </tr>
+            </thead>
+        <tbody>
+        <% let totalUploadTime = 0 %>
+        <% let totalQuantity = 0 %>
+        <% let totalPlantedDuration = 0 %>
+        <% result.forEach((obj) => { %> 
+            <tr>
+                <td><%= obj.date %></td>
+                <td><%= obj.uploadTimes %></td>
+                <td><%= obj.quantity %></td>
+                <td><%= obj.plantedDuration %></td>
+            </tr>
+            <% totalUploadTime += obj.uploadTimes %>
+            <% totalQuantity += obj.quantity %>
+            <% totalPlantedDuration += obj.plantedDuration %>
+            <% numberOfDays++ %>
+        <% }) %>
+        <tr>
+            <th>Total</th>
+            <th><%= totalUploadTime %></th>
+            <th>
+                <!-- <%= totalQuantity %> -->
+            </th>
+            <th><%= totalPlantedDuration %></th>
+        </tr>
+        </tbody>
+        </table>
+    <% } else { %>
+        <div class="alert alert-info"><strong>No results</strong></div>
+    <% } %>
+    <div class="container-fluid well">
+        <strong>Total number of days: <%= numberOfDays %></strong>
+    </div>
+</div>

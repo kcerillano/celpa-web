@@ -1,0 +1,160 @@
+<!-- Show map in modal -->
+<div class="modal fade" id="croplocation" 
+  role="dialog" style="width: 100%">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <div id="map"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    // data
+    let crop;
+    // Map variables
+    let map;    
+    let cropMarker;
+
+    async function getPlaceId(location) {
+        const geocoder = new google.maps.Geocoder;
+        const latlng = {lat: parseFloat(location.latitude), lng: parseFloat(location.longitude)};
+        return new Promise(async(resolve, reject) => {
+            console.log("Getting placeId in geocoder");
+            await geocoder.geocode({'location': latlng}, async(results, status) => {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        resolve(results[1].place_id);
+                    }
+                }
+                reject(0);
+            });
+        });
+    }
+
+    async function getPlace(placeId) {
+        const request = {
+            placeId: placeId
+        };
+
+        const service = new google.maps.places.PlacesService(map);
+        return new Promise(async(resolve, reject) => {
+            console.log("Getting place using placeId");
+            await service.getDetails(request, async(place, status) => {
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    console.log("Place: %s", JSON.stringify(place));
+                    resolve(place);
+                }
+                reject(null);
+            });
+        });
+        
+    }
+
+    // Initialize map
+    async function setCropOnMap(crop) {
+        this.crop = crop;
+        console.log("Setting crop location on map");
+        try {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13,
+                center: {lat: crop.location.latitude, lng: crop.location.longitude}
+            });
+
+            let photos;
+            try {
+                const placeId = await getPlaceId(crop.location);
+                console.log("PlaceId: %s", placeId);
+                const place = await getPlace(placeId);
+                console.log("Place: %s", place);                
+                photos = place.photos;
+                if (!photos) {
+                    photos = crop.img_path.photos;
+                } else {
+                    photos[0] = photos[0].getUrl({'maxWidth': 250, 'maxHeight': 250})
+                }
+            } catch(e) {
+                throw e;
+            }
+
+            const contentString = 
+                '<div class="container-fluid">'
+                + '<center>'
+                + '<a href="' + photos[0] + '">'
+                + '<img src="' + photos[0] + '"'
+                + 'class="img-thumbnail" alt="Cinque Terre">'
+                + '</a>'
+                + '<br>'
+                + '</center>' 
+                + '</div>'               
+                + 
+                'Address: <strong>' + crop.location.address + '</strong>'
+                + '<br>'
+                + 'Weather: <strong>' + crop.weather + '</strong>'
+                + '</div>'
+            ;
+
+            var infowindow = new google.maps.InfoWindow({
+            content: contentString
+            });
+
+            const cropMarker = new google.maps.Marker({
+                position: {lat: crop.location.latitude, lng: crop.location.longitude},
+                map: map,
+                title: crop.name,
+            });
+
+            cropMarker.addListener('click', () => {
+                infowindow.setOptions({maxWidth:250});
+                infowindow.open(map, cropMarker);
+            });
+
+            // Assign to global
+            this.cropMarker = cropMarker;
+        } catch(e) {
+            throw e;
+        }
+    }
+
+    // Open modal and set values
+    function openModal(crop) {
+        console.log("Called openModal()");
+        console.log("Crop: %s", crop);
+        // Stringified when passed, parsed back to obj        
+        crop = JSON.parse(crop);
+        $('.modal-title').html(crop.name);        
+        $('#croplocation').modal('show');
+        // Show marker on map
+        setCropOnMap(crop);
+    }
+
+    // Center map to crop location
+    function centerToCrop(location) {
+        map.setCenter(new google.maps.LatLng(location.latitude, location.longitude));        
+    }
+
+    // Force click marker
+    function forceClickMarker(cropMarker) {
+        google.maps.event.trigger(cropMarker, 'click');
+    }
+
+    // Resize map when shown in modal
+    // Will display immediately
+    $("#croplocation").on("shown.bs.modal", (e) => {
+        console.log("Resizing google map");
+        google.maps.event.trigger(map, "resize");
+        forceClickMarker(this.cropMarker);        
+        centerToCrop(this.crop.location);
+    });
+
+</script> 
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5n-12thMGa4wfqF0R7jKCQI5an0Xgs3w&libraries=places"">
+</script>   

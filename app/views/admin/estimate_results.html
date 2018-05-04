@@ -1,0 +1,88 @@
+  <div class="panel-body">
+      <% if (crops) { %>
+          <div class="row">
+                <% crops.forEach((crop) => { %>  
+                  <div class="col-md-4">
+                    <div class="well well-sm">
+                      <center>
+                        <a href="<%= crop.img_path.photos[0] %>">
+                          <img src="<%= crop.img_path.photos[0] %>"
+                            class="img-thumbnail" alt="Cinque Terre"
+                            title="<%= crop.name %>">
+                        </a>
+                      </center>
+                      <center>
+                          <span style="margin-top: 10px; margin-bottom: 10px">
+                            <strong><%= crop.name %></strong>
+                          </span>
+                          <br>
+                          By <span style="color: green"><strong><%= crop.firstName %> <%= crop.lastName %></strong></span>                     
+                          <br>
+                          <strong><%= crop.mobile_number %></strong>
+                          <br>        
+                          <br>                                 
+                          <button type="button" class="btn btn-primary"
+                            data-toggle="modal" data-id="<%= crop.name %>"
+                            onClick="openModal('<%= JSON.stringify(crop) %>')" >
+                            Show on map
+                          </button> 
+                      </center>
+                      <p></p>                          
+                      <ul>
+                          <li class="list-item">
+                              <span><u>Approx. date of harvest:</u></span>
+                              <span style="color: red"><strong><%= crop.approx_date_harvest %></strong></span>
+                          </li>
+                          <li class="list-item">
+                              <u>No. of days crops are planted:</u> 
+                              <strong><%= crop.planted_duration %></strong>                          
+                              <p></p>
+                          </li>
+                          <li class="list-item">
+                              <u>Photo taken:</u>
+                              <strong><%= crop.timestamp %></strong>
+                          </li>
+                          <br>
+                          <li class="list-item">
+                            <u>Address:</u>
+                            <strong><%= crop.location.address %></strong>
+                          </li>
+                          <li class="list-item">
+                            <u>Weather:</u>
+                            <strong><%= crop.weather %></strong>
+                          </li>
+                          <li class="list-item">
+                            <u>Fertilizers used per day:</u> 
+                            <strong><%= crop.no_of_ferts_used %></strong>
+                          </li>
+                          <li class="list-item">
+                            <u>Water applied per day:</u> 
+                            <strong><%= crop.no_of_water_applied %></strong>
+                          </li>
+                          <li class="list-item">
+                            <u>Date and time planted:</u> 
+                            <strong><%= crop.planted_start_date %></strong>
+                          </li>
+                          <% if (!crop.square_meter) { %>
+                            <li class="list-item"> 
+                              <u>Quantity of current lived crops:</u>
+                              <strong><%= crop.quantity %></strong>
+                            </li>
+                          <% } else { %>
+                            <li class="list-item"> 
+                              <u>Minimum square meter that can be planted:</u>
+                              <strong><%= crop.square_meter %>sqm</strong>
+                            </li>
+                          <% } %>
+                      </ul>
+                    </div>
+                  </div>
+                <% }) %>
+          </div>
+      <% } else { %>
+        <div class="alert alert-info"><strong>No results</strong></div>
+      <% } %>
+  </div>
+  <!-- Show crop location on modal -->
+  <% include show_map_modal.html %>
+  

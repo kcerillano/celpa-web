@@ -1,0 +1,23 @@
+<h2 class="text-white" style="margin-left: 10%">Upload stats</h2>
+<form role="form" action="/celpa/admin/reports/uploadstats">
+    <div class="container">
+        <div id="upload_stats_form" class="form-group well">
+            <center>
+                <input type="text" name="farmer_id" id="farmer_id" value="<%= farmer_id %>" hidden>
+                <% if (dateOption === "all") { %>
+                    <input type="radio" name="dateOption" value="all" checked="checked"><span style="margin-left:1%; margin-right: 2%">All</span>
+                    <input type="radio" name="dateOption" value="setdate"><span style="margin-left:1%; margin-right: 2%">Set date</span>
+                <% } else { %>
+                    <input type="radio" name="dateOption" value="all"><span style="margin-left:1%; margin-right: 2%">All</span>
+                    <input type="radio" name="dateOption" value="setdate" checked="checked"><span style="margin-left:1%; margin-right: 2%">Set date</span>
+                <% } %>
+                From: <input type="date" name="from_date" id="from_date" value="<%= from_date %>">
+                To: <input type="date" name="to_date" id="to_date" value="<%= to_date %>">
+                <button type="submit" class="btn btn-primary">
+                    Submit
+                </button>
+            </center>
+        </div>
+    </div>
+</form>
+      

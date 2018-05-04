@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Celpa</title>
+    <link href="../../css/celpa.css" rel="stylesheet">    
+    <link href="../../css/bootstrap/3.3.7/bootstrap.min.css" rel="stylesheet">
+    <script src="../../js/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <body>
+      <% include header.html %>
+      <div class="container" style="margin-top: 5%">
+          <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                <div class="well navbtn" 
+                onClick="window.location='http://localhost:3000/celpa/customer/market'">
+                    <center><h1>Market</h1></center>
+                </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+          </div>
+          <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <div class="well navbtn"
+                    onClick="window.location='http://localhost:3000/celpa/about'">
+                        <center><h1>About</h1></center>
+                    </div>
+                </div>
+                <div class="col-md-4"></div>
+          </div>
+          <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <div class="well navbtn"
+                    onClick="window.location='http://localhost:3000/celpa/logout'">
+                        <center><h1>Logout</h1></center>
+                    </div>
+                </div>
+                <div class="col-md-4"></div>
+          </div>
+      </div>
+      <% include footer.html %>
+  </body>
+</html>

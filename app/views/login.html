@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Celpa</title>
+    <link href="../css/celpa.css" rel="stylesheet">    
+    <link href="../../css/bootstrap/3.3.7/bootstrap.min.css" rel="stylesheet">
+    <script src="../../js/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../../js/bootstrap/3.3.7/bootstrap.min.js"></script>
+  </head>
+  <body>
+      <% include dialog.html %>
+      <% include header.html %>
+        <div class="container">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 well">
+                <form id="user_form" action="/celpa/validateLogin">
+                    <input type="text" class="form-control" id="userName" name="userName" placeholder="Username">
+                    <br>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    <br>
+                    <center>
+                        <input type="submit" class="btn btn-primary" value="Login">
+                        <br>
+                    </center>
+                </form>
+                <br><br>
+                <center><span>Do you want to buy crops?</span></center>
+                <center><a href="http://localhost:3000/celpa/register">Register as customer</a></center>
+            </div>
+            <div class="col-md-4"></div>                  
+        </div>
+      <br>
+      <% include footer.html %>
+  </body>
+  <script type='text/javascript'>
+    /* Attach a submit handler to the form */
+    $("#user_form").submit(function(event) {
+        /* Stop form from submitting normally */
+        event.preventDefault();
+
+        /* Get the action attribute from the <form action=""> element */
+        const $form = $(this), url = $form.attr("action");
+
+        /* Send the data using post with element id name and name2*/
+        const posting = $.post(url, { userName: $("#userName").val(), password: $("#password").val()});
+
+        /* Alerts the results */
+        posting.done(function( data ) {
+            console.log("Response: %s", data);
+            if(jQuery.isEmptyObject(data)) {
+                console.log("User invalid!");
+                openModal("Login", "Invalid username/password!");
+                return;
+            }
+
+            if(data.type === "admin") {
+                window.location = "http://localhost:3000/celpa/admin/main";
+            } else if(data.type === "customer") {
+                window.location = "http://localhost:3000/celpa/customer/main";
+            }
+        });
+    });
+  </script>
+</html>

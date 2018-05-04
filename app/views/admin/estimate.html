@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Celpa</title>
+    <link href="../../css/celpa.css" rel="stylesheet">    
+    <link href="../../css/bootstrap/3.3.7/bootstrap.min.css" rel="stylesheet">
+    <script src="../../js/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../../js/bootstrap/3.3.7/bootstrap.min.js"></script>    
+  </head>
+  <body>
+      <% include header.html %>
+      <div class="container" style="margin-top: 1%">
+        <form action="/celpa/admin/estimate">        
+            <label class="text-white" for="crop_names">Choose crop</label>
+            <select class="form-control" id="crop_names" name="crop_names" onChange="this.form.submit()">
+              <% const crop_names = [{value: 'Lettuce'}, {value: 'Cucumber'}, {value: 'Chili(Pangsigang)'}] %>
+              <% crop_names.forEach((crop_name) => { %>
+                <option value="<%= crop_name.value %>"
+                  <%= crop_name.value == crop_name_param ? "selected" : "" %>>
+                  <%= crop_name.value %>
+                </option>
+              <% }) %>
+            </select>
+        </form>
+      </div>
+      <% if (invalidParameters) { %>
+        <div class="alert alert-danger">
+            <strong>Invalid value for crop name for input parameters</strong><br><br>
+            Crop names can only have letters on it.
+        </div>
+      <% } %>
+
+      <% if (searchResults) { %>
+        <% include estimate_results.html %>
+      <% } %>
+      
+      <% include footer.html %>
+  </body>
+  <script>
+    $(document).ready(() => {
+        $("#main").removeClass("hidden");
+        $("#crops").removeClass("hidden");
+        $("#reports").removeClass("hidden");
+        
+
+        // Set onclick for shown modules
+        $("#main").click((e) => {  
+            window.location = "http://localhost:3000/celpa/admin/main";
+        });
+
+        $("#crops").click((e) => {
+            window.location = "http://localhost:3000/celpa/admin/monitorcrops";
+        });
+
+        $("#reports").click((e) => {
+            window.location = "http://localhost:3000/celpa/admin/reports/farmers";
+        });
+    });
+  </script>
+</html>

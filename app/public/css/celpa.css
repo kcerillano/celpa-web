@@ -1,0 +1,80 @@
+/* Always set the map height explicitly to define the size of the div
+* element that contains the map. */
+#map {
+    display: block;    
+    height: 80vh;
+    width: 100%;
+}
+/* Optional: Makes the sample page fill the window. */
+html, body {
+    background-image: url("../images/ic_bg.jpg");
+    height: 100%; 
+    background-position: center;
+    background-repeat: repeat;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.leftpadding {
+    padding-left: 3% !important;
+}
+.banner {
+    background: green;
+    color: white;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: green !important;
+    border-color: green !important;
+}
+
+.img-thumbnail {
+    width: 50%;
+    height: 50%;
+}
+
+.navbtn {
+    padding: 5px
+}
+
+div.hidden {
+   display: none
+}
+
+.transparent {    
+    background-color: rgba(0,0,0,0.15);
+}
+
+.bg_white {
+    background-color: white;
+}
+
+.text-white {
+    color: white;
+}
+
+.shorter-container {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.table-bg {
+    background: #ffe6e6;
+}
+
+.modal-header {
+    padding:9px 15px;
+    border-bottom:1px solid #eee;
+    background-color: green;
+    color: white;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+     border-top-left-radius: 5px;
+     border-top-right-radius: 5px;
+ }

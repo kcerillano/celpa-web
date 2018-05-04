@@ -1,0 +1,43 @@
+<form role="form" action="/celpa/admin/reports/crops">
+    <div class="container">
+        <br>
+        <div id="crop_form" class="form-group well">
+            <label for="crop_name">Crop name</label>
+            <select class="form-control" id="default_crops" name="default_crops">
+                <% const crop_names = [{value: 'Lettuce'}, {value: 'Cucumber'}, {value: 'Chili(Pangsigang)'}, {value: 'Other'}] %>
+                <% crop_names.forEach((crop_name) => { %>
+                <option value="<%= crop_name.value %>"
+                    <%= crop_name.value == default_crops ? "selected" : "" %>>
+                    <%= crop_name.value %>
+                </option>
+                <% }) %>
+            </select>
+            <% if(default_crops === "Other") { %>
+                <input type="text" class="form-control" id="crop_name" name="crop_name"
+                placeholder="cucumber, lettuce" value="<%= crop_name %>">
+            <% } else { %>
+                <input type="hidden" class="form-control" id="crop_name" name="crop_name"
+                placeholder="cucumber, lettuce" value="<%= crop_name %>">
+            <% } %>
+            
+            <input type="hidden" class="form-control" id="farmer_id" name="farmer_id"
+            value="<%= farmer_id %>">
+            <br>
+            <center>
+                <% if (dateOption === "all") { %>
+                    <input type="radio" name="dateOption" value="all" checked="checked"><span style="margin-left:1%; margin-right: 2%">All</span>
+                    <input type="radio" name="dateOption" value="setdate"><span style="margin-left:1%; margin-right: 2%">Set date</span>
+                <% } else { %>
+                    <input type="radio" name="dateOption" value="all"><span style="margin-left:1%; margin-right: 2%">All</span>
+                    <input type="radio" name="dateOption" value="setdate" checked="checked"><span style="margin-left:1%; margin-right: 2%">Set date</span>
+                <% } %>
+                From: <input type="date" name="from_date" id="from_date" value="<%= from_date %>">
+                To: <input type="date" name="to_date" id="to_date" value="<%= to_date %>">
+                <button type="submit" class="btn btn-primary">
+                    Submit
+                </button>
+            </center>
+        </div>
+    </div>
+</form>
+      
