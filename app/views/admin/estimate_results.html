@@ -53,7 +53,11 @@
                                   var difference_ms = date2_ms - date1_ms;
                                   
                                   // Convert back to days and return
-                                  return Math.round(difference_ms/one_day); 
+                                  var days = Math.round(difference_ms/one_day); 
+                                  if(days <= 0) {
+                                    return 0;
+                                  }
+                                  return days;
                                 }
                               %>
                               <span style="color: red"><strong><%= diffDaysFromNow(crop.approx_date_harvest_time) %></strong></span>
