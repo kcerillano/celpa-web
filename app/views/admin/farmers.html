@@ -31,13 +31,7 @@
       // See all crops
       function seeAllCrops(farmer_id) {
         console.log("Called seeAllCrops");
-        window.location = "http://localhost:3000/celpa/admin/reports/crops?crop_name=&farmer_id=" + farmer_id;
-      }
-
-      // See upload stats
-      function seeUploadStats(farmer_id) {
-        console.log("Called seeAllCrops");
-        window.location = "http://localhost:3000/celpa/admin/reports/uploadstats?farmer_id=" + farmer_id;
+        window.location = "http://localhost:3000/celpa/admin/farmers/crops?crop_name=&farmer_id=" + farmer_id;
       }
 
       $(document).ready(() => {
