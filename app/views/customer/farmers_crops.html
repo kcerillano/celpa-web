@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Celpa</title>
+    <link href="../../../css/celpa.css" rel="stylesheet">    
+    <link href="../../../css/bootstrap/3.3.7/bootstrap.min.css" rel="stylesheet">
+    <script src="../../../js/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../../../js/bootstrap/3.3.7/bootstrap.min.js"></script>    
+  </head>
+  <body>
+      <% include farmers_header.html %>
+      <% include farmers_form_crops.html %>      
+      <div style="padding-left: 10%; padding-right:10%">      
+      </div>  
+      <% if (invalidParameters) { %>
+        <div class="alert alert-danger">
+            <strong>Invalid value for crop name for input parameters</strong><br><br>
+            Crop names can only have letters on it.
+        </div>
+      <% } %>
+      <div style="padding-left: 10%; padding-right:10%">  
+          <% if (searchResults) { %>
+            <% include farmers_results_crops.html %>
+          <% } %>    
+      </div>
+
+      <% include footer.html %>
+  </body>
+  <script>
+      $(document).ready(() => {
+        $("#main").removeClass("hidden");
+        $("#crops").removeClass("hidden");
+        $("#estimate").removeClass("hidden");
+
+        // Set onclick for shown modules
+        $("#main").click((e) => {  
+          window.location = "http://localhost:3000/celpa/customer/main";
+        });
+
+        $("#estimate").click((e) => {
+          window.location = "http://localhost:3000/celpa/customer/estimate";
+        });
+
+        $("#crops").click((e) => {  
+          window.location = "http://localhost:3000/celpa/customer/monitorcrops";
+        });
+        
+        // Hide crop_name input type
+        $("select").on("change", function() {
+          console.log("Selected crop: %s", this.value);
+          if(this.value === "Other") {
+            $("#crop_name").get(0).type = "text";
+            // Empty value of input type
+            $("#crop_name").get(0).value = "";
+          } else {
+            $("#crop_name").get(0).type = "hidden";
+            // Assign drop down value to actual crop name input type
+            $("#crop_name").get(0).value = this.value;
+          }
+        })
+
+        presetDates();
+      });
+
+      function presetDates() {
+        const from_date = $("#from_date").val();
+        const to_date = $("#to_date").val();
+        if(!from_date) {
+          console.log("From date is empty");
+          let yesterday = new Date()
+          yesterday.setDate(yesterday.getDate() - 1);
+          document.getElementById("from_date").valueAsDate = yesterday;
+        }
+
+        if(!to_date) {
+          console.log("To date is empty");
+          let today = new Date();
+          document.getElementById("to_date").valueAsDate = today;
+        }
+      }
+  </script>
+</html>

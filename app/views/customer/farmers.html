@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Celpa</title>
+    <link href="../../../css/celpa.css" rel="stylesheet">    
+    <link href="../../../css/bootstrap/3.3.7/bootstrap.min.css" rel="stylesheet">
+    <script src="../../../js/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../../../js/bootstrap/3.3.7/bootstrap.min.js"></script>    
+  </head>
+  <body>
+      <% include farmers_header.html %>
+      <% include farmers_form.html %>      
+      <div style="padding-left: 10%; padding-right:10%">      
+      </div>  
+      <% if (invalidParameters) { %>
+        <div class="alert alert-danger">
+            <strong>No farmers found</strong><br><br>
+        </div>
+      <% } %>
+      <div style="padding-left: 10%; padding-right:10%">  
+          <% if (searchResults) { %>
+            <% include farmers_results.html %>
+          <% } %>    
+      </div>
+
+      <% include footer.html %>
+  </body>
+  <script>
+      // See all crops
+      function seeAllCrops(farmer_id) {
+        console.log("Called seeAllCrops");
+        window.location = "http://localhost:3000/celpa/customer/farmers/crops?crop_name=&farmer_id=" + farmer_id;
+      }
+
+      $(document).ready(() => {
+        $("#main").removeClass("hidden");
+        $("#estimate").removeClass("hidden");
+        $("#crops").removeClass("hidden");
+        $("#reports").removeClass("hidden");
+
+        // Set onclick for shown modules
+        $("#main").click((e) => {  
+          window.location = "http://localhost:3000/celpa/customer/main";
+        });
+
+        $("#estimate").click((e) => {
+          window.location = "http://localhost:3000/celpa/customer/estimate";
+        });
+
+        $("#crops").click((e) => {
+          window.location = "http://localhost:3000/celpa/customer/monitorcrops";
+        });
+
+        $("#reports").click((e) => {
+          window.location = "http://localhost:3000/celpa/customer/reports/farmers";
+        });
+      });
+  </script>
+</html>

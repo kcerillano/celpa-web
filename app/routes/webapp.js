@@ -427,6 +427,111 @@ function pathsForCustomer(app) {
   app.get(basePath + customerPath + "/main", async(req, res) => {
     return res.render("customer/main");
   });
+
+  app.get(basePath + customerPath + "/farmers", async(req, res) => {
+    const farmer_name = req.query.farmer_name;
+    console.log("Getting farmers ");
+
+    const ejsLocalVariables = {
+      farmer_name: farmer_name,
+      farmers: [],
+      searchResults: false,
+      invalidParameters: false
+    };
+
+    if(!validator.isValidInput(farmer_name)) {
+        ejsLocalVariables.invalidParameters = true;
+        return res.render("customer/farmers", ejsLocalVariables);
+    }
+    const result = await dbhelper.getFarmersByName(farmer_name);
+    // console.log("Result", result);
+    if(result.length > 0) {
+        console.log(util.inspect(result, false, null));               
+        ejsLocalVariables.farmers = result;
+        ejsLocalVariables.searchResults = true;
+    }
+    console.log("Farmers module");
+    return res.render("customer/farmers", ejsLocalVariables);
+  }); 
+
+  app.get(basePath + customerPath + "/farmers/crops", async(req, res) => {
+    const farmer_id = req.query.farmer_id || 1007;
+    const farmer_name = "";
+    const crop_name = req.query.crop_name || "";
+    const default_crops = req.query.default_crops || "";
+    const dateOption = req.query.dateOption || "all";
+    let from_date = req.query.from_date || "";
+    let to_date = req.query.to_date || "";
+
+    console.log("Getting crops => %s from farmer: %s for reports. Crop name param: %s", farmer_id, crop_name, default_crops);
+
+    const ejsLocalVariables = {
+      farmer_id: farmer_id,
+      farmer_name: farmer_name,
+      crop_name: crop_name,
+      default_crops: default_crops,
+      dateOption: dateOption,
+      from_date: from_date,
+      to_date: to_date,
+      crops: [],
+      searchResults: false,
+      invalidParameters: false
+    };
+
+    const farmer = await dbhelper.getFarmerById(farmer_id);
+    if(farmer) {
+      ejsLocalVariables.farmer_name = farmer.firstName + " " + farmer.lastName;
+    }
+
+    if(!validator.isValidInput(crop_name)) {
+        ejsLocalVariables.invalidParameters = true;
+        return res.render("customer/farmers_crops", ejsLocalVariables);
+    }
+
+    // include time in dates
+    from_date = from_date + " 00:00";
+    to_date = to_date + " 23:59";
+    console.log("from_date with time: %s, to_date with time: %s", from_date, to_date);
+    const from_unixtime = new Date(from_date) / 1000;
+    const to_unixtime = new Date(to_date).getTime() / 1000;
+
+    let result = [];
+    if(crop_name.length > 0) {
+      console.log("Getting crops: %s with farmer_id: %s", farmer_id, crop_name);
+      result = await dbhelper.getCropsByFarmerId(farmer_id, crop_name);
+      
+      if(dateOption === "setdate") {
+        console.log("Getting crops: %s with farmer_id: %s using setdate", farmer_id, crop_name);
+        
+        if(from_date && to_date) {
+          result = await dbhelper.getCropsByFarmerId(farmer_id, crop_name, from_unixtime, to_unixtime);
+        }
+      }
+    } else {
+      console.log("Getting all crops with farmer_id: %s", farmer_id);
+      result = await dbhelper.getCropsByFarmerId(farmer_id);
+      
+      if(dateOption === "setdate") {
+        console.log("Getting all crops with farmer_id: %s using setdate", farmer_id);
+        
+        if(from_date && to_date) {
+          result = await dbhelper.getCropsByFarmerId(farmer_id, "", from_unixtime, to_unixtime);
+        }
+      }
+      
+    }
+    if(result.length > 0) {
+      result.forEach((crop) => {
+          crop.img_path.photos[0] = "http://" + ip_address + ":" + process.env.PORT + crop.img_path.photos[0];
+          crop.approx_date_harvest = moment(crop.approx_date_harvest * 1000).format("dddd, MMMM Do YYYY hh:ss a");
+          crop.planted_start_date = moment(crop.planted_start_date * 1000).format("dddd, MMMM Do YYYY hh:ss a");
+          crop.timestamp = moment(crop.timestamp * 1000).format("dddd, MMMM Do YYYY hh:ss a");
+      });
+      ejsLocalVariables.crops = result;
+      ejsLocalVariables.searchResults = true;
+    }
+    return res.render("customer/farmers_crops", ejsLocalVariables);
+  });
 }
 
 

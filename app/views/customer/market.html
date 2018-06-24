@@ -27,6 +27,12 @@
       <% include footer.html %>
   </body>
   <script>
+      // See all crops
+      function seeAllCrops(farmer_id) {
+        console.log("Called seeAllCrops");
+        window.location = "http://localhost:3000/celpa/customer/farmers/crops?crop_name=&farmer_id=" + farmer_id;
+      }
+
       $(document).ready(() => {
         $("#main").removeClass("hidden");
         $("#estimate").removeClass("hidden");
