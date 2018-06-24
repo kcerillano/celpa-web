@@ -33,6 +33,7 @@
         $("#main").removeClass("hidden");
         $("#crops").removeClass("hidden");
         $("#estimate").removeClass("hidden");
+        $("#farmers").removeClass("hidden");
 
         // Set onclick for shown modules
         $("#main").click((e) => {  
@@ -43,8 +44,12 @@
           window.location = "http://localhost:3000/celpa/admin/estimate";
         });
 
-        $("#crops").click((e) => {  
+        $("#crops").click((e) => {
           window.location = "http://localhost:3000/celpa/admin/monitorcrops";
+        });
+
+        $("#farmers").click((e) => {
+          window.location = "http://localhost:3000/celpa/admin/farmers";
         });
         
         // Hide crop_name input type

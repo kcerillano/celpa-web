@@ -27,11 +27,17 @@
       <% include footer.html %>
   </body>
   <script>
+      // See all crops
+      function seeAllCrops(farmer_id) {
+          console.log("Called seeAllCrops");
+          window.location = "http://localhost:3000/celpa/admin/farmers/crops?crop_name=&farmer_id=" + farmer_id;
+      }
+
       $(document).ready(() => {
         $("#main").removeClass("hidden");
         $("#estimate").removeClass("hidden");
         $("#reports").removeClass("hidden");
-        
+        $("#farmers").removeClass("hidden");
 
         // Set onclick for shown modules
         $("#main").click((e) => {  
@@ -44,6 +50,10 @@
 
         $("#reports").click((e) => {  
           window.location = "http://localhost:3000/celpa/admin/reports/farmers";
+        });
+
+        $("#farmers").click((e) => {
+          window.location = "http://localhost:3000/celpa/admin/farmers";
         });
       });
   </script>

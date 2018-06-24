@@ -16,7 +16,9 @@
                             <strong><%= crop.name %></strong>
                           </span>
                           <br>
-                          By <span style="color: green"><strong><%= crop.firstName %> <%= crop.lastName %></strong></span>                     
+                          By <span style="color: green">
+                              <strong><a onClick="seeAllCrops('<%= crop.farmer_id %>')"><u><%= crop.firstName %> <%= crop.lastName %></u></a></strong>
+                            </span>                     
                           <br>
                           <strong><%= crop.mobile_number %></strong>
                           <br>
