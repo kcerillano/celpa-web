@@ -100,6 +100,32 @@ function pathsForAdmin(app) {
         ejsLocalVariables.searchResults = true;
     }
     return res.render("admin/monitorcrops", ejsLocalVariables);
+  });
+  
+  app.get(basePath + adminPath + "/farmers", async(req, res) => {
+    const farmer_name = req.query.farmer_name;
+    console.log("Getting farmers ");
+
+    const ejsLocalVariables = {
+      farmer_name: farmer_name,
+      farmers: [],
+      searchResults: false,
+      invalidParameters: false
+    };
+
+    if(!validator.isValidInput(farmer_name)) {
+        ejsLocalVariables.invalidParameters = true;
+        return res.render("admin/farmers", ejsLocalVariables);
+    }
+    const result = await dbhelper.getFarmersByName(farmer_name);
+    // console.log("Result", result);
+    if(result.length > 0) {
+        console.log(util.inspect(result, false, null));               
+        ejsLocalVariables.farmers = result;
+        ejsLocalVariables.searchResults = true;
+    }
+    console.log("Farmers module");
+    return res.render("admin/farmers", ejsLocalVariables);
   }); 
 
   app.get(basePath + adminPath + "/main", async(req, res) => {
