@@ -37,7 +37,21 @@
                           </li>
                           <li class="list-item">
                               <span><u>Number of days remaining before harvest:</u></span>
-                              <span style="color: red"><strong><%= crop.approx_date_harvest %></strong></span>
+                              <%
+                                diffDaysFromNow = function(d) {
+                                  var date = new Date(d);
+                                  var now = new Date();
+                                  var one_day=1000*60*60*24;
+                                  // Convert both dates to milliseconds
+                                  var date1_ms = now.getTime() / 1000;
+                                  var date2_ms = date.getTime();
+                                  // Calculate the difference in milliseconds
+                                  var difference_ms = date2_ms - date1_ms;
+                                  // Convert back to days and return
+                                  return Math.round(difference_ms/one_day); 
+                                }
+                              %>
+                              <span style="color: red"><strong><%= diffDaysFromNow(crop.approx_date_harvest_time) %></strong></span>
                           </li>
                           <li class="list-item">
                               <u>No. of days crops are planted:</u> 

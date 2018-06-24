@@ -58,6 +58,7 @@ function pathsForAdmin(app) {
     const result = await dbhelper.getCropsByName(crop_names);
     if(result.length > 0) {
         result.forEach((crop) => {
+            crop.approx_date_harvest_time = crop.approx_date_harvest;
             crop.img_path.photos[0] = "http://" + ip_address + ":" + process.env.PORT + crop.img_path.photos[0];
             crop.approx_date_harvest = moment(crop.approx_date_harvest * 1000).format("dddd, MMMM Do YYYY hh:ss a");
             crop.planted_start_date = moment(crop.planted_start_date * 1000).format("dddd, MMMM Do YYYY hh:ss a");
@@ -366,7 +367,6 @@ function pathsForCustomer(app) {
   app.get(basePath + customerPath + "/estimate", async(req, res) => {
     const crop_names = req.query.crop_names;
     console.log("Getting estimate: %s", crop_names);
-
     const ejsLocalVariables = {
       crop_names: crop_names || "",
       crop_name_param: crop_names || "",
@@ -378,10 +378,12 @@ function pathsForCustomer(app) {
     const result = await dbhelper.getCropsByName(crop_names);
     if(result.length > 0) {
         result.forEach((crop) => {
+            crop.approx_date_harvest_time = crop.approx_date_harvest;
             crop.img_path.photos[0] = "http://" + ip_address + ":" + process.env.PORT + crop.img_path.photos[0];
             crop.approx_date_harvest = moment(crop.approx_date_harvest * 1000).format("dddd, MMMM Do YYYY hh:ss a");
             crop.planted_start_date = moment(crop.planted_start_date * 1000).format("dddd, MMMM Do YYYY hh:ss a");
             crop.timestamp = moment(crop.timestamp * 1000).format("dddd, MMMM Do YYYY hh:ss a");
+            console.log("approx date harvest time", crop.approx_date_harvest_time);
         });
         console.log(util.inspect(result, false, null));               
         ejsLocalVariables.crops = result;

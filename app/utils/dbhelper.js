@@ -155,7 +155,7 @@ async function getCropsByName(crop_name) {
             result.forEach((crop, index) => {
                 // Save img path and location in db is written as string
                 result[index].img_path = JSON.parse(crop.img_path);  
-                result[index].location = JSON.parse(crop.location);              
+                result[index].location = JSON.parse(crop.location);  
             });
             resolve(result);
         });
