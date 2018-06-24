@@ -130,6 +130,7 @@ function pathsForAdmin(app) {
 
   app.get(basePath + adminPath + "/farmers/crops", async(req, res) => {
     const farmer_id = req.query.farmer_id || 1007;
+    const farmer_name = "";
     const crop_name = req.query.crop_name || "";
     const default_crops = req.query.default_crops || "";
     const dateOption = req.query.dateOption || "all";
@@ -140,6 +141,7 @@ function pathsForAdmin(app) {
 
     const ejsLocalVariables = {
       farmer_id: farmer_id,
+      farmer_name: farmer_name,
       crop_name: crop_name,
       default_crops: default_crops,
       dateOption: dateOption,
@@ -149,6 +151,11 @@ function pathsForAdmin(app) {
       searchResults: false,
       invalidParameters: false
     };
+
+    const farmer = await dbhelper.getFarmerById(farmer_id);
+    if(farmer) {
+      ejsLocalVariables.farmer_name = farmer.firstName + " " + farmer.lastName;
+    }
 
     if(!validator.isValidInput(crop_name)) {
         ejsLocalVariables.invalidParameters = true;
