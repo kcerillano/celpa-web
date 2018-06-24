@@ -129,9 +129,9 @@ async function getCrops(id, cropName) {
         console.log("Getting all crops...");
         let sql = "";
         if(cropName)
-            sql= util.format("SELECT * from crop WHERE farmer_id = %s AND name LIKE '%s" + "%'", id, cropName);
+            sql= util.format("SELECT * from crop WHERE farmer_id = %s AND name LIKE '%s" + "%' ORDER BY timestamp DESC", id, cropName);
         else
-            sql= util.format("SELECT * from crop WHERE farmer_id = %s", id);
+            sql= util.format("SELECT * from crop WHERE farmer_id = %s ORDER BY timestamp DESC", id);
             
         console.log("Sql: %s", sql);
         await con.query(sql, async(err, result) => {
@@ -156,7 +156,7 @@ async function getCropsByName(crop_name) {
                     + " farmer.id as 'farmer_id', farmer.firstName, farmer.lastName, farmer.mobile_number"
                     + " FROM crop "
                     + " INNER JOIN farmer ON crop.farmer_id = farmer.id" 
-                    + " WHERE crop.name LIKE '%s'", crop_name + "%");
+                    + " WHERE crop.name LIKE '%s' ORDER BY crop.timestamp DESC", crop_name + "%");
         console.log("Sql: %s", sql);
         await con.query(sql, async(err, result) => {
             if(err)
@@ -182,7 +182,7 @@ async function getCropsByNameFromMarket(crop_name) {
                     + " FROM crop "
                     + " INNER JOIN farmer ON crop.farmer_id = farmer.id" 
                     + " WHERE crop.name LIKE '%s'"
-                    + " AND crop.post_to_market = 1", crop_name + "%");
+                    + " AND crop.post_to_market = 1 ORDER BY crop.timestamp DESC", crop_name + "%");
         console.log("Sql: %s", sql);
         await con.query(sql, async(err, result) => {
             if(err)
@@ -210,7 +210,7 @@ async function getCropsByFarmerId(farmerId, cropName, from, to) {
             + " farmer.id as 'farmer_id', farmer.firstName, farmer.lastName, farmer.mobile_number"
             + " FROM crop "
             + " INNER JOIN farmer ON crop.farmer_id = farmer.id" 
-            + " WHERE crop.farmer_id = %s AND crop.name LIKE '%s" + "%'", farmerId, cropName);
+            + " WHERE crop.farmer_id = %s AND crop.name LIKE '%s" + "%' ORDER BY crop.timestamp DESC", farmerId, cropName);
 
             if(from && to) {
                 sql = util.format("SELECT crop.id, crop.name, crop.img_path,"
@@ -220,7 +220,7 @@ async function getCropsByFarmerId(farmerId, cropName, from, to) {
                 + " FROM crop "
                 + " INNER JOIN farmer ON crop.farmer_id = farmer.id" 
                 + " WHERE crop.farmer_id = %s AND crop.name LIKE '%s" + "%'"
-                + " AND crop.timestamp >= %s AND crop.timestamp <= %s", farmerId, cropName, from, to);
+                + " AND crop.timestamp >= %s AND crop.timestamp <= %s ORDER BY crop.timestamp DESC", farmerId, cropName, from, to);
             }
         } else {
             console.log("No cropname");
@@ -231,7 +231,7 @@ async function getCropsByFarmerId(farmerId, cropName, from, to) {
             + " farmer.id as 'farmer_id', farmer.firstName, farmer.lastName, farmer.mobile_number"
             + " FROM crop "
             + " INNER JOIN farmer ON crop.farmer_id = farmer.id" 
-            + " WHERE crop.farmer_id = %s", farmerId);
+            + " WHERE crop.farmer_id = %s ORDER BY crop.timestamp DESC", farmerId);
 
             if(from && to) {
                 sql = util.format("SELECT crop.id, crop.name, crop.img_path,"
@@ -240,7 +240,7 @@ async function getCropsByFarmerId(farmerId, cropName, from, to) {
                 + " farmer.id as 'farmer_id', farmer.firstName, farmer.lastName, farmer.mobile_number"
                 + " FROM crop "
                 + " INNER JOIN farmer ON crop.farmer_id = farmer.id" 
-                + " WHERE crop.farmer_id = %s AND crop.timestamp >= %s AND crop.timestamp <= %s", farmerId, from, to);    
+                + " WHERE crop.farmer_id = %s AND crop.timestamp >= %s AND crop.timestamp <= %s ORDER BY crop.timestamp DESC", farmerId, from, to);    
             }
         }
         console.log("Sql: %s", sql);
