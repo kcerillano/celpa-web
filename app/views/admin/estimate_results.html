@@ -39,14 +39,15 @@
                               <span><u>Number of days remaining before harvest:</u></span>
                               <%
                                 diffDaysFromNow = function(d) {
-                                  console.log("specifiedDate", d);
-                                  var date = new Date(d);
+                                  var date = new Date(d * 1000);
                                   var now = new Date();
+                                  console.log("Dates: %s, %s", date, now);
+
                                   var one_day=1000*60*60*24;
 
                                   // Convert both dates to milliseconds
-                                  var date1_ms = date.getTime() / 1000;
-                                  var date2_ms = now.getTime() / 1000;
+                                  var date1_ms = now.getTime();
+                                  var date2_ms = date.getTime();
 
                                   // Calculate the difference in milliseconds
                                   var difference_ms = date2_ms - date1_ms;
